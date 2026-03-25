@@ -1,0 +1,20 @@
+# Large model files
+*.bin
+*.bin.gz
+*.h5
+*.pkl
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Unrelated files
+talos-homelab-plan-v2-FINAL.md
