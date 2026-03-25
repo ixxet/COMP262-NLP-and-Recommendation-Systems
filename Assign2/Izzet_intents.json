@@ -1,0 +1,87 @@
+{"intents": [
+    {"tag": "greeting",
+     "patterns": ["Hi", "Hey", "Is anyone there?", "Hello", "How are you?"],
+     "responses": ["Hello! Welcome to our coffee shop.", "Hi there! What can I get for you?", "Hey! Ready to order some coffee?", "Hello! How can I help you today?"]
+    },
+
+    {"tag": "thanks",
+     "patterns": ["Thanks", "Thank you", "That's helpful", "Thanks for the help"],
+     "responses": ["Happy to help!", "Any time!", "My pleasure!", "You're most welcome!"]
+    },
+
+    {"tag": "goodbye",
+     "patterns": ["Bye", "See you later", "Goodbye", "I'm leaving"],
+     "responses": ["Goodbye! Enjoy your coffee!", "See you next time!", "Have a great day!", "Bye! Come back soon!"]
+    },
+
+    {"tag": "menu",
+     "patterns": ["What do you have?", "Can I see the menu?", "What drinks do you serve?", "Show me your offerings"],
+     "responses": ["We serve espresso, latte, cappuccino, americano, mocha, cold brew, and tea!", "Our menu includes espresso drinks, cold brews, teas, and seasonal specials.", "We have a wide selection of hot and cold beverages. Would you like coffee, tea, or something cold?"]
+    },
+
+    {"tag": "order_espresso",
+     "patterns": ["I want an espresso", "Can I get an espresso please?", "One espresso", "I'd like to order an espresso"],
+     "responses": ["One espresso coming right up!", "Great choice! Your espresso will be ready shortly.", "Espresso ordered! Would you like anything else?"]
+    },
+
+    {"tag": "order_latte",
+     "patterns": ["I want a latte", "Can I get a latte?", "One latte please", "I'd like a latte"],
+     "responses": ["One latte on the way!", "Latte coming up! Any flavor preference?", "Great! Your latte will be ready soon.", "One latte ordered! Would you like it hot or iced?"]
+    },
+
+    {"tag": "order_cappuccino",
+     "patterns": ["I want a cappuccino", "Can I have a cappuccino?", "One cappuccino please", "Give me a cappuccino"],
+     "responses": ["Cappuccino coming right up!", "One cappuccino on the way!", "Great choice! Your cappuccino will be ready shortly."]
+    },
+
+    {"tag": "order_cold_brew",
+     "patterns": ["I want a cold brew", "Can I get a cold brew?", "One cold brew please", "I'd like an iced coffee"],
+     "responses": ["Cold brew coming up!", "One cold brew on the way! Would you like cream or sugar?", "Great choice for a refreshing drink! Your cold brew is being prepared."]
+    },
+
+    {"tag": "order_mocha",
+     "patterns": ["I want a mocha", "Can I get a mocha?", "One mocha please", "I'd like a mocha"],
+     "responses": ["One mocha coming up!", "Mocha ordered! Extra chocolate?", "Your mocha will be ready shortly!", "Great choice! One mocha on the way."]
+    },
+
+    {"tag": "sizes",
+     "patterns": ["What sizes do you have?", "What are the available sizes?", "Can I get a large?", "Do you have small medium large?"],
+     "responses": ["We have Small, Medium, and Large.", "Our sizes are Small (8oz), Medium (12oz), and Large (16oz).", "We offer three sizes: Small, Medium, and Large. Which would you prefer?"]
+    },
+
+    {"tag": "prices",
+     "patterns": ["How much is a coffee?", "What are your prices?", "How much does a latte cost?", "Can you tell me the prices?"],
+     "responses": ["Our drinks range from $3.50 to $6.50 depending on size and type.", "A small coffee starts at $3.50. Specialty drinks like lattes start at $4.50.", "Prices vary by drink and size. Would you like the price for a specific item?"]
+    },
+
+    {"tag": "customization",
+     "patterns": ["Can I add extra milk?", "Do you have oat milk?", "Can I customize my drink?", "I want extra sugar"],
+     "responses": ["Of course! We offer whole milk, oat milk, almond milk, and soy milk.", "You can customize any drink with milk alternatives, extra shots, or flavor syrups!", "Sure! What customization would you like?", "We have several options: milk alternatives, extra espresso shots, and flavor syrups."]
+    },
+
+    {"tag": "payment",
+     "patterns": ["How can I pay?", "Do you accept credit cards?", "Can I pay with cash?", "What payment methods do you accept?"],
+     "responses": ["We accept cash, credit cards, debit cards, and mobile payments.", "You can pay with cash, card, or Apple Pay and Google Pay.", "We accept all major payment methods including contactless payments."]
+    },
+
+    {"tag": "hours",
+     "patterns": ["What are your hours?", "When do you open?", "What time do you close?", "Are you open on weekends?"],
+     "responses": ["We are open Monday to Friday 6AM-8PM, and weekends 7AM-6PM.", "Our hours are 6AM to 8PM on weekdays and 7AM to 6PM on weekends.", "We open at 6AM on weekdays and 7AM on weekends!"]
+    },
+
+    {"tag": "location",
+     "patterns": ["Where are you located?", "What is your address?", "How do I find you?", "Where is the shop?"],
+     "responses": ["We are located at 941 Progress Avenue, Scarborough, ON.", "You can find us at 941 Progress Avenue, right near Centennial College!", "Our shop is at 941 Progress Ave, Scarborough. Easy to find!"]
+    },
+
+    {"tag": "order_status",
+     "patterns": ["Is my order ready?", "How long will my order take?", "When will my coffee be ready?", "What is the wait time?"],
+     "responses": ["Your order should be ready in 3-5 minutes!", "Most drinks take about 3-5 minutes to prepare.", "Almost done! Just a couple more minutes.", "The typical wait time is 3 to 5 minutes."]
+    },
+
+    {"tag": "cancel_order",
+     "patterns": ["I want to cancel my order", "Can I cancel?", "Please cancel my order", "I changed my mind"],
+     "responses": ["Your order has been cancelled. Would you like to order something else?", "No problem, order cancelled! Let me know if you change your mind.", "Order cancelled. Is there anything else I can help with?"]
+    }
+]
+}
