@@ -2,7 +2,10 @@
 *.bin
 *.bin.gz
 *.h5
-*.pkl
+
+# Generated model artifacts (run training scripts to regenerate)
+Assign2/model/
+Assign3/similarity_data.pkl
 
 # macOS
 .DS_Store
