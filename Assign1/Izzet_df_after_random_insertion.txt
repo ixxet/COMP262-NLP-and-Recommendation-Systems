@@ -1,0 +1,9 @@
+sentiment	text
+positive	sir keshod mamlatdar office says didnt receive grant covid19 exgratia claim govt many c
+negative	informally reached epidemiologists open position arizona response would work az
+positive	joke really isnt funny serious completely touch reality w
+negative	well covid19 leading cause death indiana based average daily deaths closing aga
+positive	sir keshod Gohad Mary_Stehman concedes didnt receive ConnectOregon_II covid19 exgratia claim govt numerous c
+negative	informally reached psychologists open position tucson CD8_T_cell would work az
+positive	official_Michika_Izumi really isnt funny serious completely instinctiveness reality ar
+negative	well covid19 www.DecisionResources.com cause death indiana based average regularly deaths Semiconductor_HOLDRS_AMEX_SMH nÃ
