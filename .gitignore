@@ -7,6 +7,19 @@
 Assign2/model/
 Assign3/similarity_data.pkl
 
+# Generated submission bundles and demo media
+output/
+*.zip
+*.mp4
+Assign*/Assign*_Izzet_report.docx
+Assign*/Izzet_assignment*.docx
+
+# Final project datasets and generated outputs
+Final Project/data/raw/
+Final Project/data/processed/
+Final Project/outputs/
+Final Project/project262_gr*_phase2.zip
+
 # macOS
 .DS_Store
 

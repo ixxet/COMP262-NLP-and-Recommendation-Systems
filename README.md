@@ -13,10 +13,11 @@
 ├── Assign1/     Data Preprocessing & Sentiment Analysis
 ├── Assign2/     Deep Learning Intent Classification (Chatbot)
 ├── Assign3/     Recommender Systems (Association Rules + Content-Based)
+├── Final Project/ Amazon Review Sentiment + Review-Enhanced Recommendation
 └── README.md    ← You are here (course-level overview)
 ```
 
-Each assignment directory contains its own `README.md` with granular exercise breakdowns, a full runbook, expected results, definitions, and industry context. This page provides the macro view: how the three assignments connect and build on each other.
+Each assignment directory contains its own `README.md` with granular exercise breakdowns, a full runbook, expected results, definitions, and industry context. The final project extends the same structure into a two-phase sentiment analysis and recommender system study.
 
 ---
 
@@ -27,6 +28,7 @@ Each assignment directory contains its own `README.md` with granular exercise br
 | 1 | Data Preprocessing & Sentiment Analysis | Web scraping, regex, Word2Vec augmentation, lexicon-based scoring | [Assign1](Assign1/) |
 | 2 | Deep Learning Intent Classification | Keras Tokenizer, embedding layers, Sequential model, train/serve split | [Assign2](Assign2/) |
 | 3 | Recommender Systems | Apriori association rules, TF-IDF vectorization, cosine similarity | [Assign3](Assign3/) |
+| Final | Amazon Review Sentiment + Recommendation | VADER, SentiWordNet, TF-IDF, Logistic Regression, Naive Bayes, review-enhanced scoring, local Hugging Face models | [Final Project](Final%20Project/) |
 
 ---
 
@@ -34,19 +36,19 @@ Each assignment directory contains its own `README.md` with granular exercise br
 
 The three assignments form a deliberate progression through the NLP and recommendation systems landscape. Each assignment introduces new concepts while reinforcing and extending earlier ones.
 
-### Phase 1 → Phase 2 → Phase 3
+### Phase 1 → Phase 2 → Phase 3 → Final Project
 
 ```
-Assignment 1                    Assignment 2                    Assignment 3
-─────────────                   ─────────────                   ─────────────
-RULE-BASED NLP                  LEARNED REPRESENTATIONS         RECOMMENDATION SYSTEMS
+Assignment 1                    Assignment 2                    Assignment 3                    Final Project
+─────────────                   ─────────────                   ─────────────                   ─────────────
+RULE-BASED NLP                  LEARNED REPRESENTATIONS         RECOMMENDATION SYSTEMS          INTEGRATED NLP + REC SYS
 
-Web scraping          ───→      (data comes pre-structured)     (data comes pre-structured)
-Regex cleaning        ───→      Tokenizer handles cleanup  ──→  TF-IDF handles cleanup
-Manual word lists     ───→      Learned embeddings         ──→  TF-IDF term weighting
-If/else sentiment     ───→      Neural classification      ──→  Similarity computation
-Static dictionaries   ───→      Trained model weights      ──→  Precomputed similarity matrix
-One-off script        ───→      Train/serve separation     ──→  Precompute/serve separation
+Web scraping          ───→      (data comes pre-structured)     (data comes pre-structured)     Amazon JSONL reviews
+Regex cleaning        ───→      Tokenizer handles cleanup  ──→  TF-IDF handles cleanup     ──→  model-specific preprocessing
+Manual word lists     ───→      Learned embeddings         ──→  TF-IDF term weighting      ──→  lexicon + supervised models
+If/else sentiment     ───→      Neural classification      ──→  Similarity computation     ──→  apples-to-apples evaluation
+Static dictionaries   ───→      Trained model weights      ──→  Precomputed similarity     ──→  review-enhanced ratings
+One-off script        ───→      Train/serve separation     ──→  Precompute/serve split     ──→  notebook verification checklist
 ```
 
 ### How Each Assignment Builds on the Last
@@ -84,6 +86,16 @@ One-off script        ───→      Train/serve separation     ──→  Pr
 | Working with JSON data structures | Both recipes.json and meta_Digital_Music.json.gz require JSON parsing |
 | Interactive `input()` loops | Both recommender scripts use the same pattern with validation and exit commands |
 
+#### Assignment 3 → Final Project: Integration and Evaluation
+
+| What Assignment 3 Does | What the Final Project Adds |
+|------------------------|-----------------------------|
+| Builds recommendation logic from structured recipe/music data | Uses Amazon review text as both sentiment evidence and recommender signal |
+| Uses TF-IDF for content similarity | Uses TF-IDF for supervised sentiment classification |
+| Evaluates output qualitatively through interactive recommendations | Evaluates classifiers with accuracy, precision, recall, F1, and confusion matrices |
+| Precomputes similarity artifacts for speed | Builds a reproducible notebook with explicit verification checks |
+| Focuses on recommendation only | Combines lexicon sentiment, ML sentiment, recommender enhancement, and local LLM tasks |
+
 ---
 
 ## Techniques Across All Three Assignments
@@ -96,6 +108,7 @@ One-off script        ───→      Train/serve separation     ──→  Pr
 | 1 | Word2Vec (for augmentation) | Dense pre-trained vectors | 300 (Google News vectors) |
 | 2 | Keras Embedding | Dense learned vectors | 20 (trained from scratch) |
 | 3 | TF-IDF | Sparse weighted vectors | 5,000 (capped vocabulary) |
+| Final | VADER / SentiWordNet / TF-IDF | Rule scores + sparse supervised features | Lexicon scores + capped TF-IDF vocabulary |
 
 Each representation captures different information. Lexicon matching captures sentiment polarity. Word2Vec captures semantic similarity between words. Learned embeddings capture task-specific word relationships. TF-IDF captures term importance relative to a corpus. Understanding when to use which representation is the central skill of applied NLP.
 
@@ -136,6 +149,7 @@ The tooling changes, but the pattern is constant: **acquire → clean → encode
 | `tensorflow` / `keras` | Assign2 | Neural network construction, training, and inference |
 | `apyori` | Assign3 | Apriori algorithm for association rule mining |
 | `pickle` | Assign2, 3 | Serialization of tokenizers, encoders, and similarity matrices |
+| `transformers` + `torch` | Final Project | Local Hugging Face summarization and response generation |
 
 ---
 
@@ -166,6 +180,11 @@ cd ..
 cd Assign3
 python Izzet_cuisine_recommender.py    # Association rules recommender
 python Izzet_songs_recommender.py      # Content-based recommender (first run: ~3 min)
+cd ..
+
+# Final Project
+cd "Final Project"
+jupyter notebook project262_gr5_ph2_code.ipynb
 cd ..
 ```
 
