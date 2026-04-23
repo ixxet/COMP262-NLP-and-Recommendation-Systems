@@ -1,0 +1,112 @@
+{
+  "project": {
+    "name": "Amazon Gift Cards Sentiment Lab",
+    "course": "COMP 262 - NLP and Recommendation Systems",
+    "team": "Group 5",
+    "dataset": "Amazon Gift Cards",
+    "source": "Amazon Review Data 2018 - Jianmo Ni / UCSD"
+  },
+  "datasets": [
+    {
+      "name": "Phase 1 5-core",
+      "raw_rows": 2972,
+      "clean_rows": 2971,
+      "unique_users": 458,
+      "unique_products": 148,
+      "missing_review_text_raw": 12,
+      "duplicate_clean_key_rows": 0
+    },
+    {
+      "name": "Phase 2 full",
+      "raw_rows": 147194,
+      "clean_rows": 147165,
+      "unique_users": 128870,
+      "unique_products": 1548,
+      "missing_review_text_raw": 318,
+      "duplicate_clean_key_rows": 0
+    }
+  ],
+  "phase1_sample": {
+    "rows": 1000,
+    "negative": 15,
+    "neutral": 5,
+    "positive": 980
+  },
+  "phase2_modeling": {
+    "rows": 20000,
+    "train_rows": 14000,
+    "test_rows": 6000,
+    "negative": 1197,
+    "neutral": 407,
+    "positive": 18396
+  },
+  "model_metrics": [
+    {
+      "model": "Phase 1 VADER",
+      "accuracy": 0.865,
+      "macro_precision": 0.383925,
+      "macro_recall": 0.403628,
+      "macro_f1": 0.383482,
+      "weighted_f1": 0.912993
+    },
+    {
+      "model": "Phase 1 SentiWordNet",
+      "accuracy": 0.698,
+      "macro_precision": 0.354674,
+      "macro_recall": 0.39127,
+      "macro_f1": 0.315456,
+      "weighted_f1": 0.809293
+    },
+    {
+      "model": "Phase 2 Logistic Regression",
+      "accuracy": 0.935833,
+      "macro_precision": 0.578589,
+      "macro_recall": 0.584083,
+      "macro_f1": 0.581125,
+      "weighted_f1": 0.935528
+    },
+    {
+      "model": "Phase 2 Multinomial Naive Bayes",
+      "accuracy": 0.946833,
+      "macro_precision": 0.673671,
+      "macro_recall": 0.52215,
+      "macro_f1": 0.549153,
+      "weighted_f1": 0.935493
+    },
+    {
+      "model": "Phase 2 VADER",
+      "accuracy": 0.841667,
+      "macro_precision": 0.452447,
+      "macro_recall": 0.444849,
+      "macro_f1": 0.439016,
+      "weighted_f1": 0.866158
+    },
+    {
+      "model": "Phase 2 SentiWordNet",
+      "accuracy": 0.719833,
+      "macro_precision": 0.397028,
+      "macro_recall": 0.430022,
+      "macro_f1": 0.383167,
+      "weighted_f1": 0.790067
+    }
+  ],
+  "recommender_metrics": [
+    {
+      "model": "Baseline item mean rating",
+      "mae": 0.537211,
+      "rmse": 0.954387
+    },
+    {
+      "model": "Sentiment-enhanced item mean rating",
+      "mae": 0.647677,
+      "rmse": 0.958849
+    }
+  ],
+  "findings": [
+    "The Gift Cards dataset is overwhelmingly positive, so accuracy alone is not enough.",
+    "Logistic Regression produced the strongest macro-F1 among the tested Phase 2 models.",
+    "Naive Bayes produced the highest accuracy, but macro-F1 shows weaker minority-class balance.",
+    "The sentiment-enhanced recommender did not beat the baseline item-average model on MAE/RMSE.",
+    "VADER is the more practical lexicon baseline for this review style; SentiWordNet is more academic but brittle."
+  ]
+}

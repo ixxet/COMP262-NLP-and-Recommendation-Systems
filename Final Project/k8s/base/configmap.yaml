@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: giftcard-config
+  namespace: giftcard-sentiment
+data:
+  GIFT_CARD_CORS_ORIGINS: '["*"]'
+  API_BASE_URL: "http://giftcard-api:8000"

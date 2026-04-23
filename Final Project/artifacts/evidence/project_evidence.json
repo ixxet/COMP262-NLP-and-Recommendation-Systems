@@ -1,0 +1,39 @@
+{
+  "evidence": [
+    {
+      "id": "dataset-imbalance",
+      "title": "Dataset Imbalance",
+      "body": "The Phase 2 modeling subset contains 18,396 positive reviews, 1,197 negative reviews, and 407 neutral reviews. This heavy positive skew means accuracy can be misleading, so macro-F1 and confusion matrices are needed."
+    },
+    {
+      "id": "best-model",
+      "title": "Best Balanced Sentiment Model",
+      "body": "Logistic Regression achieved the strongest macro-F1 in Phase 2 at 0.581125. Naive Bayes had the highest accuracy at 0.946833, but its lower macro-F1 shows weaker balance on minority classes."
+    },
+    {
+      "id": "lexicon-choice",
+      "title": "Lexicon Choice",
+      "body": "VADER is practical for customer reviews because it uses punctuation, negation, intensity, and capitalization cues. SentiWordNet is more academic and requires POS tagging and WordNet synset scoring, but it is brittle on short informal reviews."
+    },
+    {
+      "id": "recommender-result",
+      "title": "Recommender Enhancement Result",
+      "body": "The sentiment-enhanced item-average recommender had MAE 0.647677 and RMSE 0.958849, while the baseline item-average recommender had MAE 0.537211 and RMSE 0.954387. The enhancement did not improve prediction error."
+    },
+    {
+      "id": "recommender-why",
+      "title": "Why Enhancement Did Not Improve",
+      "body": "Gift Cards reviews are already overwhelmingly positive, so review sentiment often repeats the same signal already present in the star rating. The sentiment-derived virtual rating can add noise instead of useful independent information."
+    },
+    {
+      "id": "tfidf-choice",
+      "title": "Why TF-IDF",
+      "body": "TF-IDF is fast, interpretable, and strong for classical text classification. It fits the assignment requirement to choose one text representation and is easier to explain than embeddings for this course deliverable."
+    },
+    {
+      "id": "llm-task",
+      "title": "Local Hugging Face LLM Tasks",
+      "body": "The notebook uses sshleifer/distilbart-cnn-12-6 for summarizing 10 reviews longer than 100 words and google/flan-t5-small for drafting a service representative response to a question-style review."
+    }
+  ]
+}

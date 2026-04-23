@@ -1,0 +1,11 @@
+.venv/
+frontend/node_modules/
+frontend/.svelte-kit/
+frontend/build/
+data/raw/
+data/processed/
+outputs/
+artifacts/models/
+__pycache__/
+*.pyc
+.DS_Store

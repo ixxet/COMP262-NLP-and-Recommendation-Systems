@@ -13,7 +13,7 @@ The project is currently a reproducible notebook deliverable:
 - implements a sentiment-enhanced recommender experiment
 - runs local Hugging Face summarization and response-generation tasks
 
-This is enough for the course code requirement. It is not yet a product-style app.
+This is enough for the course code requirement. The first product slice now mirrors the Deep Learning final project's deployment strategy: FastAPI, SvelteKit, Dockerfiles, Kustomize, Prometheus metrics, and GitHub Actions.
 
 ## Recommended Upgrade Path
 
@@ -32,7 +32,7 @@ Endpoints:
 | `GET /examples/summaries` | return the 10 LLM summary examples |
 | `POST /llm/respond` | draft a service-response style answer |
 
-Keep the backend read-mostly. It should not retrain models on every request.
+Status: implemented as a read-mostly API over committed notebook-derived JSON artifacts. The live sentiment endpoint is a deterministic demo scorer; the notebook remains the source of truth for trained model results.
 
 ### 2. SvelteKit Frontend
 
@@ -46,7 +46,7 @@ Recommended screens:
 4. **Recommendation Lab** - adjust the sentiment blend weight and observe score changes.
 5. **LLM Desk** - show long-review summaries and the service-response example.
 
-This gives the project "pizzazz" while staying grounded in the assignment.
+Status: implemented as a SvelteKit dashboard using the same frontend technology pattern as the Deep Learning project, without reusing that UI's domain-specific components.
 
 ### 3. Model Artifact Layer
 
@@ -73,7 +73,7 @@ Final Project/
 └── project262_gr5_ph2_code.ipynb
 ```
 
-Do not commit large raw data or heavyweight model downloads.
+Status: partially implemented. Metrics, examples, and retrieval evidence are committed as small JSON artifacts. Exact trained scikit-learn model artifacts are still a future improvement.
 
 ### 4. LangGraph and RAG, Only If Useful
 
@@ -105,7 +105,7 @@ Recommended local platform fit:
 | Postgres | optional durable chat/session state |
 | Grafana/Prometheus | app and agent request monitoring |
 
-Avoid adding LangGraph if it only wraps a single prompt. That would be ceremony.
+Status: implemented as lightweight evidence retrieval first. LangGraph remains deferred until the workflow needs multiple real steps such as retrieval, answer drafting, grounding verification, and revision.
 
 ### 5. Kubernetes Deployment
 
@@ -117,6 +117,8 @@ Once backend/frontend exist:
 - add basic auth or platform auth before public tunneling
 - add Prometheus scrape annotations for the API
 
+Status: base and Talos Kustomize overlays are scaffolded. They follow the Deep Learning app's image, Kustomize, ServiceMonitor, and LoadBalancer pattern.
+
 Minimal runtime:
 
 ```text
@@ -127,10 +129,10 @@ SvelteKit frontend -> FastAPI backend -> local artifacts
 ## Suggested Priority
 
 1. Write the final report and slides.
-2. Add saved artifacts and FastAPI endpoints.
-3. Add SvelteKit UI.
-4. Add Docker and local run docs.
-5. Add Kubernetes manifests.
-6. Add RAG assistant only after the app already communicates the core results well.
+2. Persist exact trained models from the notebook.
+3. Add a one-origin deployment route for UI + API.
+4. Add Qdrant/TEI-backed evidence retrieval.
+5. Add LangGraph only after the assistant needs real multi-step control.
+6. Add Grafana dashboard JSON and cluster smoke checks.
 
 The strongest demo is not the most complex stack. The strongest demo is one where every extra component explains or exposes a project result better than the notebook alone.

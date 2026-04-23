@@ -19,6 +19,11 @@ Final Project/data/raw/
 Final Project/data/processed/
 Final Project/outputs/
 Final Project/project262_gr*_phase2.zip
+Final Project/.venv/
+Final Project/frontend/node_modules/
+Final Project/frontend/.svelte-kit/
+Final Project/frontend/build/
+Final Project/artifacts/models/
 
 # macOS
 .DS_Store
@@ -26,6 +31,7 @@ Final Project/project262_gr*_phase2.zip
 # Python
 __pycache__/
 *.pyc
+*.egg-info/
 .ipynb_checkpoints/
 
 # IDE

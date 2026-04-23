@@ -3,7 +3,8 @@
 **Course:** COMP 262 - NLP and Recommendation Systems  
 **Team:** Group 5  
 **Assigned Dataset:** Amazon Gift Cards  
-**Primary Deliverable:** `project262_gr5_ph2_code.ipynb`
+**Primary Deliverable:** `project262_gr5_ph2_code.ipynb`<br>
+**Product Demo:** FastAPI + SvelteKit app scaffold in `backend/` and `frontend/`
 
 ---
 
@@ -30,7 +31,7 @@ The project uses customer review text to solve four connected problems:
 3. Compare lexicon and machine learning models on the same held-out test set.
 4. Use review sentiment to enhance rating-based recommendation scores, then test whether the enhancement improves prediction error.
 
-The implementation is intentionally notebook-first because the course deliverable requires working code, visible charts, model outputs, and presentation-ready results.
+The implementation is intentionally notebook-first because the course deliverable requires working code, visible charts, model outputs, and presentation-ready results. The upgraded app layer wraps the notebook results in a presentation-grade FastAPI/SvelteKit demo without retraining models on every request.
 
 ---
 
@@ -178,6 +179,69 @@ Final Project/data/raw/Gift_Cards.json.gz
 
 The notebook downloads them from the UCSD Amazon review data host when missing.
 
+### Run the Product Demo API
+
+```bash
+cd "Final Project"
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+uvicorn giftcard_sentiment.api.main:app --app-dir backend --reload
+```
+
+Useful endpoints:
+
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /healthz` | API health check |
+| `GET /readyz` | artifact readiness check |
+| `GET /v1/summary` | notebook-derived dataset/model/recommender metrics |
+| `POST /v1/sentiment/predict` | live demo sentiment scoring |
+| `POST /v1/recommend/enhance` | rating + sentiment blend calculator |
+| `GET /v1/examples/summaries` | local Hugging Face example outputs |
+| `POST /v1/assistant/ask` | evidence retrieval over project findings |
+| `GET /metrics` | Prometheus metrics |
+
+### Run the SvelteKit UI
+
+```bash
+cd "Final Project/frontend"
+npm install
+npm run dev
+```
+
+The UI proxies `/api/...` requests to `http://localhost:8000` by default. Override with:
+
+```bash
+API_BASE_URL=http://localhost:8000 npm run dev
+```
+
+### Container and Kubernetes Shape
+
+The app mirrors the Deep Learning final project's deployment style:
+
+- Python package with `pyproject.toml`
+- FastAPI backend Dockerfile
+- SvelteKit frontend with adapter-node and Dockerfile
+- Kustomize base and Talos overlay
+- Prometheus scrape path through `/metrics`
+- GitHub Actions workflow that tests backend, frontend, Kustomize, and builds GHCR images
+
+Local image build:
+
+```bash
+cd "Final Project"
+docker build -f backend/Dockerfile -t giftcard-sentiment-api:local .
+docker build -f frontend/Dockerfile -t giftcard-sentiment-ui:local .
+```
+
+Kustomize validation:
+
+```bash
+cd "Final Project"
+kustomize build k8s/overlays/talos
+```
+
 ---
 
 ## Expected Results
@@ -235,13 +299,11 @@ The main dataset caveat is class imbalance: Amazon Gift Cards reviews are overwh
 
 The current notebook is a correct academic deliverable. A stronger productized version would add:
 
-1. A FastAPI backend for sentiment prediction, model comparison, and recommender scoring.
-2. A SvelteKit dashboard for interactive demos and presentation polish.
-3. Persisted model artifacts so the UI does not retrain models at startup.
-4. A LangGraph project assistant that answers questions from the report, notebook outputs, and recommender paper.
-5. Qdrant-backed retrieval over selected review examples, model metrics, and paper notes.
-6. Kubernetes manifests for local cluster deployment.
-7. Prometheus metrics for request counts, latency, and model usage.
-8. CI checks for notebook execution, linting, and artifact validation.
+1. Persist exact trained scikit-learn model artifacts from the notebook with `joblib`.
+2. Add a reverse proxy or route so the SvelteKit UI and API share one public origin in Kubernetes.
+3. Replace the lightweight retrieval endpoint with a Qdrant-backed evidence index.
+4. Add LangGraph once the project assistant needs a real workflow, such as retrieve -> draft -> verify citations -> revise.
+5. Add Grafana dashboard JSON for request counts, latency, sentiment labels, and project-assistant questions.
+6. Add report and slide PDF generation from committed markdown sources.
 
 The best next upgrade is a small app wrapper around the completed notebook results, not a large agent system. LangGraph becomes worthwhile only if it retrieves and explains project evidence, rather than acting as a generic chatbot.
