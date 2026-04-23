@@ -286,6 +286,10 @@ textarea {
   font-weight: 700;
 }
 
+.local-error {
+  margin: 10px 0 0;
+}
+
 @media (max-width: 900px) {
   .topbar,
   .grid {

@@ -95,7 +95,7 @@ class LlmExamplesResponse(BaseModel):
 
 
 class AskRequest(BaseModel):
-    question: str = Field(min_length=3, max_length=1000)
+    question: str = Field(min_length=1, max_length=1000)
     max_evidence: int = Field(default=3, ge=1, le=5)
 
 

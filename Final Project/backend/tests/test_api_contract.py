@@ -50,6 +50,16 @@ class ApiContractTest(unittest.TestCase):
         self.assertTrue(payload["evidence"])
         self.assertIn("macro", payload["answer"].lower())
 
+    def test_assistant_low_signal_question(self) -> None:
+        response = self.client.post(
+            "/v1/assistant/ask",
+            json={"question": "hi", "max_evidence": 2},
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["evidence"], [])
+        self.assertIn("project-specific", payload["answer"])
+
 
 if __name__ == "__main__":
     unittest.main()

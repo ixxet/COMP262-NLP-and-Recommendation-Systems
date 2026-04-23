@@ -7,9 +7,30 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
   if (!response.ok) {
     const body = await response.text();
-    throw new Error(body || `${response.status} ${response.statusText}`);
+    throw new Error(formatError(body, response.status, response.statusText));
   }
   return response.json() as Promise<T>;
+}
+
+function formatError(body: string, status: number, statusText: string) {
+  if (!body) return `${status} ${statusText}`;
+  try {
+    const parsed = JSON.parse(body) as { detail?: unknown };
+    if (Array.isArray(parsed.detail)) {
+      return parsed.detail
+        .map((item) => {
+          if (typeof item === 'object' && item && 'msg' in item) {
+            return String(item.msg);
+          }
+          return String(item);
+        })
+        .join(' ');
+    }
+    if (typeof parsed.detail === 'string') return parsed.detail;
+  } catch {
+    // Fall through to the raw backend body.
+  }
+  return body;
 }
 
 export function getSummary() {

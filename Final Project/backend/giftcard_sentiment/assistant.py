@@ -42,6 +42,8 @@ def _tokens(text: str) -> Counter[str]:
 
 def retrieve(question: str, evidence: list[dict[str, str]], limit: int) -> list[EvidenceHit]:
     query = _tokens(question)
+    if not query:
+        return []
     hits: list[EvidenceHit] = []
     for item in evidence:
         doc = _tokens(f"{item['title']} {item['body']}")
@@ -51,15 +53,16 @@ def retrieve(question: str, evidence: list[dict[str, str]], limit: int) -> list[
         score = overlap / max(sum(query.values()), 1)
         if score > 0:
             hits.append(EvidenceHit(**item, score=round(score, 4)))
-    if not hits:
-        fallback = evidence[:limit]
-        return [EvidenceHit(**item, score=0.0) for item in fallback]
     return sorted(hits, key=lambda hit: hit.score, reverse=True)[:limit]
 
 
 def answer(question: str, hits: list[EvidenceHit]) -> str:
     if not hits:
-        return "I could not find project evidence for that question."
+        return (
+            "I could not find project evidence for that question. Ask a project-specific "
+            "question about the dataset, lexicon models, TF-IDF, Logistic Regression, "
+            "Naive Bayes, recommender results, or the LLM task outputs."
+        )
     lead = hits[0]
     if "macro" in question.lower() or "accuracy" in question.lower():
         return (

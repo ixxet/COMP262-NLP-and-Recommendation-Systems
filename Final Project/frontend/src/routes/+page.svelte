@@ -10,6 +10,7 @@
   let askResult: AskResponse | null = null;
   let loading = false;
   let error = '';
+  let askError = '';
 
   let reviewText = 'This Amazon gift card was easy to send, arrived fast, and made a perfect last-minute gift!';
   let actualRating = 5;
@@ -50,10 +51,18 @@
   async function runAsk() {
     loading = true;
     error = '';
+    askError = '';
+    askResult = null;
+    const trimmedQuestion = question.trim();
+    if (!trimmedQuestion) {
+      askError = 'Ask a project-specific question so the assistant can retrieve evidence.';
+      loading = false;
+      return;
+    }
     try {
-      askResult = await askProject(question);
+      askResult = await askProject(trimmedQuestion);
     } catch (err) {
-      error = err instanceof Error ? err.message : String(err);
+      askError = err instanceof Error ? err.message : String(err);
     } finally {
       loading = false;
     }
@@ -189,20 +198,25 @@
           <span>Question</span>
           <textarea bind:value={question} style="min-height: 86px;"></textarea>
         </label>
-        <button class="btn" disabled={loading} on:click={runAsk}>Ask</button>
+        <button class="btn" disabled={loading || question.trim().length === 0} on:click={runAsk}>Ask</button>
+        {#if askError}
+          <p class="error local-error">{askError}</p>
+        {/if}
         {#if askResult}
           <div class="result">
             <p><strong>Answer:</strong> {askResult.answer}</p>
           </div>
-          <div class="evidence">
-            {#each askResult.evidence as hit}
-              <div class="evidence-item">
-                <strong>{hit.title}</strong>
-                <span class="small">match score {hit.score.toFixed(2)}</span>
-                <p>{hit.body}</p>
-              </div>
-            {/each}
-          </div>
+          {#if askResult.evidence.length > 0}
+            <div class="evidence">
+              {#each askResult.evidence as hit}
+                <div class="evidence-item">
+                  <strong>{hit.title}</strong>
+                  <span class="small">match score {hit.score.toFixed(2)}</span>
+                  <p>{hit.body}</p>
+                </div>
+              {/each}
+            </div>
+          {/if}
         {/if}
       </div>
     </section>
