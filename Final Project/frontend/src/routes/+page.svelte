@@ -8,7 +8,8 @@
   let sentiment: SentimentResponse | null = null;
   let enhancement: EnhanceResponse | null = null;
   let askResult: AskResponse | null = null;
-  let loading = false;
+  let scoring = false;
+  let asking = false;
   let error = '';
   let askError = '';
 
@@ -16,6 +17,24 @@
   let actualRating = 5;
   let sentimentWeight = 0.3;
   let question = 'Why is macro-F1 more useful than accuracy for this project?';
+  const suggestedQuestions = [
+    {
+      label: 'Why TF-IDF?',
+      prompt: 'Why TF-IDF instead of embeddings for this project?'
+    },
+    {
+      label: 'LR vs NB',
+      prompt: 'Why did Logistic Regression beat Naive Bayes on macro-F1?'
+    },
+    {
+      label: 'Recommender result',
+      prompt: 'Why did the sentiment-enhanced recommender fail?'
+    },
+    {
+      label: 'Presentation limits',
+      prompt: 'What are the strongest limitations to mention in the presentation?'
+    }
+  ];
 
   const fmt = new Intl.NumberFormat('en-US');
   const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
@@ -31,7 +50,7 @@
   }
 
   async function runSentiment() {
-    loading = true;
+    scoring = true;
     error = '';
     try {
       sentiment = await predictSentiment(reviewText, actualRating);
@@ -39,7 +58,7 @@
     } catch (err) {
       error = err instanceof Error ? err.message : String(err);
     } finally {
-      loading = false;
+      scoring = false;
     }
   }
 
@@ -49,14 +68,13 @@
   }
 
   async function runAsk() {
-    loading = true;
-    error = '';
+    asking = true;
     askError = '';
     askResult = null;
     const trimmedQuestion = question.trim();
     if (!trimmedQuestion) {
       askError = 'Ask a project-specific question so the assistant can retrieve evidence.';
-      loading = false;
+      asking = false;
       return;
     }
     try {
@@ -64,14 +82,13 @@
     } catch (err) {
       askError = err instanceof Error ? err.message : String(err);
     } finally {
-      loading = false;
+      asking = false;
     }
   }
 
   onMount(async () => {
     await load();
-    await runSentiment();
-    await runAsk();
+    await Promise.all([runSentiment(), runAsk()]);
   });
 </script>
 
@@ -88,10 +105,10 @@
     <div>
       <h1 class="title">Gift Cards Sentiment Lab</h1>
       <p class="subtitle">
-        Compare the project models, test a live review, inspect the recommender enhancement, and ask evidence-grounded questions about the notebook results.
+        Ask grounded questions about the project, compare the notebook models, and test the live review scorer without leaving the same interface.
       </p>
     </div>
-    <div class="status"><span class="dot"></span> FastAPI-backed demo</div>
+    <div class="status"><span class="dot"></span> Grounded assistant + FastAPI demo</div>
   </div>
 
   {#if error}
@@ -122,6 +139,72 @@
   <div class="grid">
     <section class="stack">
       <div class="panel">
+        <h2>Project Answerer</h2>
+        <p>
+          Answers are grounded in committed project evidence. If a local vLLM endpoint is configured,
+          the assistant rewrites retrieved evidence into a cleaner answer and cites the evidence IDs it used.
+        </p>
+        <div class="button-row" style="margin-bottom: 12px;">
+          {#each suggestedQuestions as preset}
+            <button
+              class="btn secondary"
+              on:click={() => {
+                question = preset.prompt;
+                runAsk();
+              }}
+            >
+              {preset.label}
+            </button>
+          {/each}
+        </div>
+        <label class="field">
+          <span>Question</span>
+          <textarea bind:value={question} style="min-height: 92px;"></textarea>
+        </label>
+        <div class="button-row">
+          <button class="btn" disabled={asking || question.trim().length === 0} on:click={runAsk}>
+            {asking ? 'Grounding...' : 'Ask grounded assistant'}
+          </button>
+          {#if askResult}
+            <div class="status inline-status">
+              <span class="dot"></span>
+              {#if askResult.mode === 'vllm_grounded'}
+                Grounded via {askResult.assistant_model}
+              {:else}
+                Retrieval fallback
+              {/if}
+            </div>
+          {/if}
+        </div>
+        {#if askError}
+          <p class="error local-error">{askError}</p>
+        {/if}
+        {#if askResult}
+          <div class="result">
+            <p><strong>Answer:</strong> {askResult.answer}</p>
+          </div>
+          {#if askResult.citations.length > 0}
+            <div class="citation-row">
+              {#each askResult.citations as citation}
+                <span class="citation-chip">{citation}</span>
+              {/each}
+            </div>
+          {/if}
+          {#if askResult.evidence.length > 0}
+            <div class="evidence">
+              {#each askResult.evidence as hit}
+                <div class="evidence-item" class:cited={askResult.citations.includes(hit.id)}>
+                  <strong>{hit.title}</strong>
+                  <span class="small">match score {hit.score.toFixed(2)} · id {hit.id}</span>
+                  <p>{hit.body}</p>
+                </div>
+              {/each}
+            </div>
+          {/if}
+        {/if}
+      </div>
+
+      <div class="panel">
         <h2>Try a Review</h2>
         <p>Use this live scorer for demo interaction. The notebook remains the authority for trained model results.</p>
         <label class="field">
@@ -139,7 +222,7 @@
           </label>
         </div>
         <div class="button-row">
-          <button class="btn" disabled={loading} on:click={runSentiment}>{loading ? 'Running...' : 'Score review'}</button>
+          <button class="btn" disabled={scoring} on:click={runSentiment}>{scoring ? 'Running...' : 'Score review'}</button>
           <button
             class="btn secondary"
             on:click={() => {
@@ -190,35 +273,6 @@
           </table>
         </div>
       {/if}
-
-      <div class="panel">
-        <h2>Ask the Project</h2>
-        <p>Retrieves project evidence from committed metrics and notes. This is the clean RAG-shaped feature before adding LangGraph.</p>
-        <label class="field">
-          <span>Question</span>
-          <textarea bind:value={question} style="min-height: 86px;"></textarea>
-        </label>
-        <button class="btn" disabled={loading || question.trim().length === 0} on:click={runAsk}>Ask</button>
-        {#if askError}
-          <p class="error local-error">{askError}</p>
-        {/if}
-        {#if askResult}
-          <div class="result">
-            <p><strong>Answer:</strong> {askResult.answer}</p>
-          </div>
-          {#if askResult.evidence.length > 0}
-            <div class="evidence">
-              {#each askResult.evidence as hit}
-                <div class="evidence-item">
-                  <strong>{hit.title}</strong>
-                  <span class="small">match score {hit.score.toFixed(2)}</span>
-                  <p>{hit.body}</p>
-                </div>
-              {/each}
-            </div>
-          {/if}
-        {/if}
-      </div>
     </section>
 
     <aside class="stack">

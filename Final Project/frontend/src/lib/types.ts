@@ -78,5 +78,9 @@ export interface EvidenceHit {
 
 export interface AskResponse {
   answer: string;
+  mode: 'retrieval_fallback' | 'vllm_grounded';
+  assistant_model: string | null;
+  grounded: boolean;
+  citations: string[];
   evidence: EvidenceHit[];
 }

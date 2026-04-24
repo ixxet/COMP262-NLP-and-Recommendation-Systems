@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 from giftcard_sentiment.api.main import app
@@ -49,6 +50,8 @@ class ApiContractTest(unittest.TestCase):
         payload = response.json()
         self.assertTrue(payload["evidence"])
         self.assertIn("macro", payload["answer"].lower())
+        self.assertEqual(payload["mode"], "retrieval_fallback")
+        self.assertTrue(payload["citations"])
 
     def test_assistant_low_signal_question(self) -> None:
         response = self.client.post(
@@ -59,6 +62,30 @@ class ApiContractTest(unittest.TestCase):
         payload = response.json()
         self.assertEqual(payload["evidence"], [])
         self.assertIn("project-specific", payload["answer"])
+        self.assertEqual(payload["citations"], [])
+
+    @patch("giftcard_sentiment.api.main.maybe_generate_grounded_answer")
+    def test_assistant_grounded_llm_path(self, grounded_mock) -> None:
+        grounded_mock.return_value = type(
+            "AssistantResultStub",
+            (),
+            {
+                "answer": "TF-IDF was chosen for speed and interpretability.",
+                "citations": ["tfidf-choice"],
+                "mode": "vllm_grounded",
+                "assistant_model": "mistralai/Mistral-7B-Instruct-v0.3",
+            },
+        )()
+        response = self.client.post(
+            "/v1/assistant/ask",
+            json={"question": "Why TF-IDF?", "max_evidence": 2},
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["mode"], "vllm_grounded")
+        self.assertEqual(payload["assistant_model"], "mistralai/Mistral-7B-Instruct-v0.3")
+        self.assertEqual(payload["citations"], ["tfidf-choice"])
+        grounded_mock.assert_called_once()
 
 
 if __name__ == "__main__":

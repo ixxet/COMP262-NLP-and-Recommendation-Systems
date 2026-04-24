@@ -10,7 +10,7 @@ from prometheus_client import Counter
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from giftcard_sentiment.artifacts import load_evidence, load_llm_examples, load_project_summary
-from giftcard_sentiment.assistant import answer, retrieve
+from giftcard_sentiment.assistant import answer, maybe_generate_grounded_answer, retrieve
 from giftcard_sentiment.schemas import (
     AskRequest,
     AskResponse,
@@ -68,6 +68,8 @@ async def readyz(settings: Settings = SettingsDep) -> dict[str, Any]:
         "artifact_dir": str(settings.artifacts_dir),
         "datasets": len(summary.datasets),
         "models": len(summary.model_metrics),
+        "llm_enabled": settings.llm_enabled,
+        "llm_model": settings.llm_model,
     }
 
 
@@ -114,4 +116,14 @@ async def ask(payload: AskRequest, settings: Settings = SettingsDep) -> AskRespo
         load_evidence(str(settings.artifacts_dir)),
         payload.max_evidence,
     )
-    return AskResponse(answer=answer(payload.question, hits), evidence=hits)
+    result = maybe_generate_grounded_answer(payload.question, hits, settings)
+    if result is None:
+        result = answer(payload.question, hits)
+    return AskResponse(
+        answer=result.answer,
+        mode=result.mode,
+        assistant_model=result.assistant_model,
+        grounded=True,
+        citations=result.citations,
+        evidence=hits,
+    )

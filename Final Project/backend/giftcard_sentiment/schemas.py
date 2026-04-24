@@ -7,6 +7,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 SentimentLabel = Literal["negative", "neutral", "positive"]
+AssistantMode = Literal["retrieval_fallback", "vllm_grounded"]
 
 
 class HealthResponse(BaseModel):
@@ -108,4 +109,8 @@ class EvidenceHit(BaseModel):
 
 class AskResponse(BaseModel):
     answer: str
+    mode: AssistantMode
+    assistant_model: str | None = None
+    grounded: bool = True
+    citations: list[str]
     evidence: list[EvidenceHit]

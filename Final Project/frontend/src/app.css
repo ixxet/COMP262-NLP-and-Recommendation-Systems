@@ -77,6 +77,11 @@ button {
   font-size: 0.9rem;
 }
 
+.inline-status {
+  font-size: 0.82rem;
+  padding: 7px 10px;
+}
+
 .dot {
   width: 9px;
   height: 9px;
@@ -271,9 +276,34 @@ textarea {
   background: #fbfcfb;
 }
 
+.evidence-item.cited {
+  border-color: var(--teal);
+  background: #f2fbfb;
+}
+
 .evidence-item strong {
   display: block;
   margin-bottom: 4px;
+}
+
+.citation-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.citation-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: var(--radius);
+  background: #e7f5f5;
+  color: #0f5556;
+  border: 1px solid #b9e3e4;
+  font-size: 0.84rem;
+  font-weight: 700;
 }
 
 .small {

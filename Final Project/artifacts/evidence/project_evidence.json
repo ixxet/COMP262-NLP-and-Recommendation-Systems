@@ -1,9 +1,24 @@
 {
   "evidence": [
     {
+      "id": "dataset-scope",
+      "title": "Dataset Scope",
+      "body": "Group 5 is assigned the Amazon Gift Cards subset. Phase 1 uses the 5-core Gift Cards review data, and Phase 2 uses the larger Gift Cards review dataset from the UCSD Amazon Review Data 2018 source."
+    },
+    {
+      "id": "phase1-sample",
+      "title": "Phase 1 Sample Design",
+      "body": "Phase 1 cleans the Gift Cards 5-core data, removes missing or duplicate review records, maps ratings to positive, neutral, and negative labels, then samples exactly 1,000 reviews with a fixed random seed for the lexicon comparison."
+    },
+    {
       "id": "dataset-imbalance",
       "title": "Dataset Imbalance",
       "body": "The Phase 2 modeling subset contains 18,396 positive reviews, 1,197 negative reviews, and 407 neutral reviews. This heavy positive skew means accuracy can be misleading, so macro-F1 and confusion matrices are needed."
+    },
+    {
+      "id": "macro-f1",
+      "title": "Why Macro-F1 Matters",
+      "body": "Macro-F1 averages class performance more evenly than accuracy. In this project it is the more professional metric because the Gift Cards data is dominated by positive reviews, so a model can look strong on accuracy while still handling neutral and negative reviews poorly."
     },
     {
       "id": "best-model",
@@ -11,9 +26,39 @@
       "body": "Logistic Regression achieved the strongest macro-F1 in Phase 2 at 0.581125. Naive Bayes had the highest accuracy at 0.946833, but its lower macro-F1 shows weaker balance on minority classes."
     },
     {
+      "id": "logistic-regression",
+      "title": "Why Logistic Regression Was Strong",
+      "body": "Logistic Regression works well with TF-IDF because it can weight many sparse lexical features and learn a direct decision boundary between sentiment classes. In this project it handled minority-class balance better than Naive Bayes."
+    },
+    {
+      "id": "naive-bayes",
+      "title": "Naive Bayes Tradeoff",
+      "body": "Multinomial Naive Bayes is fast and often strong on bag-of-words style text classification, but its conditional independence assumption can make it less balanced on minority classes. Here it produced the top accuracy but weaker macro-F1 than Logistic Regression."
+    },
+    {
+      "id": "tfidf-choice",
+      "title": "Why TF-IDF",
+      "body": "TF-IDF is fast, interpretable, and strong for classical text classification. It fits the assignment requirement to choose one text representation and is easier to explain than embeddings for this course deliverable."
+    },
+    {
+      "id": "tfidf-improvements",
+      "title": "Reasonable TF-IDF Improvements",
+      "body": "The clean next tuning steps are word bigrams, class weighting, tuning Logistic Regression C, and adjusting TF-IDF min_df, max_df, and max_features. Those changes stay within the same classical ML family while improving macro-F1 more honestly than adding unrelated complexity."
+    },
+    {
       "id": "lexicon-choice",
       "title": "Lexicon Choice",
       "body": "VADER is practical for customer reviews because it uses punctuation, negation, intensity, and capitalization cues. SentiWordNet is more academic and requires POS tagging and WordNet synset scoring, but it is brittle on short informal reviews."
+    },
+    {
+      "id": "vader-vs-sentiwordnet",
+      "title": "VADER Versus SentiWordNet",
+      "body": "VADER is the stronger practical baseline for short review text, while SentiWordNet is useful as a second lexicon for the rubric because it demonstrates a more linguistic pipeline. The project conclusion is that VADER is the more deployment-friendly lexicon model."
+    },
+    {
+      "id": "phase2-split",
+      "title": "Phase 2 Train Test Split",
+      "body": "Phase 2 uses a stratified 70/30 train-test split based on rating-derived labels so the class imbalance is preserved consistently across train and test sets."
     },
     {
       "id": "recommender-result",
@@ -26,14 +71,24 @@
       "body": "Gift Cards reviews are already overwhelmingly positive, so review sentiment often repeats the same signal already present in the star rating. The sentiment-derived virtual rating can add noise instead of useful independent information."
     },
     {
-      "id": "tfidf-choice",
-      "title": "Why TF-IDF",
-      "body": "TF-IDF is fast, interpretable, and strong for classical text classification. It fits the assignment requirement to choose one text representation and is easier to explain than embeddings for this course deliverable."
-    },
-    {
       "id": "llm-task",
       "title": "Local Hugging Face LLM Tasks",
       "body": "The notebook uses sshleifer/distilbart-cnn-12-6 for summarizing 10 reviews longer than 100 words and google/flan-t5-small for drafting a service representative response to a question-style review."
+    },
+    {
+      "id": "service-response",
+      "title": "Service Response Task",
+      "body": "The response-generation task is meant to produce a customer-service style draft for a question-style review. The professional constraint is to stay polite, directly answer the customer concern, and avoid inventing account-specific facts."
+    },
+    {
+      "id": "limitations",
+      "title": "Main Project Limitations",
+      "body": "The main limitations are class imbalance, short repetitive review text, and a domain where the star rating already captures much of the signal. That is why the project is strong as an experiment even though the recommender enhancement did not beat the baseline."
+    },
+    {
+      "id": "presentation-angle",
+      "title": "Best Presentation Angle",
+      "body": "The strongest presentation is not to claim the project beat every baseline. It is to show that the team tested whether review text adds value beyond ratings, compared lexicon and ML approaches fairly, and reported a negative recommender result honestly with evidence."
     }
   ]
 }

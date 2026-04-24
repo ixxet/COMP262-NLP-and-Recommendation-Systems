@@ -189,6 +189,16 @@ pip install -e ".[dev]"
 uvicorn giftcard_sentiment.api.main:app --app-dir backend --reload
 ```
 
+Optional grounded vLLM mode for the Project Answerer:
+
+```bash
+export GIFT_CARD_LLM_BASE_URL=http://127.0.0.1:8001/v1
+export GIFT_CARD_LLM_MODEL=mistralai/Mistral-7B-Instruct-v0.3
+export GIFT_CARD_LLM_API_KEY=""
+```
+
+If those variables are unset, the assistant stays in retrieval-only fallback mode and answers directly from the committed evidence library.
+
 Useful endpoints:
 
 | Endpoint | Purpose |
@@ -199,7 +209,7 @@ Useful endpoints:
 | `POST /v1/sentiment/predict` | live demo sentiment scoring |
 | `POST /v1/recommend/enhance` | rating + sentiment blend calculator |
 | `GET /v1/examples/summaries` | local Hugging Face example outputs |
-| `POST /v1/assistant/ask` | evidence retrieval over project findings |
+| `POST /v1/assistant/ask` | grounded project answerer with optional vLLM rewrite |
 | `GET /metrics` | Prometheus metrics |
 
 ### Run the SvelteKit UI
